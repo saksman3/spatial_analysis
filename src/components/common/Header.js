@@ -86,6 +86,7 @@ function Desktop() {
       <Link component={NavLink} to={ROUTE_PATHS.DEFAULT} className={classes.title}>
         <Typography component='h1' variant='subtitle1' noWrap>
           <CartoLogo />
+          <SATaxiLogo />
           <AppName />
         </Typography>
       </Link>
@@ -143,6 +144,7 @@ function Mobile() {
         <Typography component='h1' variant='subtitle1' noWrap>
           <Hidden smUp>
             <CartoLogoXS />
+            <SATaxiLogo />
             <Divider orientation='vertical' light />
           </Hidden>
           <AppName />
@@ -172,9 +174,16 @@ function Mobile() {
 function AppName() {
   return (
     <>
-      <strong>React</strong> Demo
+      <strong>STACC</strong> 2.0
     </>
   );
+}
+function SATaxiLogo() {
+  return (
+    <>
+      <img src='../img/Logo_White.png' height='25px'></img><span>&nbsp;|&nbsp;</span>
+    </>
+  )
 }
 
 const useStylesNavigationMenu = makeStyles((theme) => ({
@@ -193,10 +202,14 @@ function NavigationMenu({ column: vertical }) {
   const pathname = location.pathname.split('/')[1] || false;
 
   return (
-    <Grid
-      container
+    <Grid  
+    container
+      justifyContent='space-between' 
+      alignItems='center'
       direction={vertical ? 'column' : 'row'}
       className={!vertical ? classes.navTabs : ''}
+    >
+    <Grid item
     >
       <Tabs
         value={pathname}
@@ -214,6 +227,17 @@ function NavigationMenu({ column: vertical }) {
           className={classes.navLink}
         />
       </Tabs>
+    </Grid>
+    <Grid item>
+        <Tab
+            label='Logout'
+            value=''
+            component={NavLink}
+            to={ROUTE_PATHS.LOGOUT}
+            className={classes.navLink}
+            sx={{ p: 0}}
+        />
+      </Grid>
     </Grid>
   );
 }
