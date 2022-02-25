@@ -15,9 +15,9 @@ const Logout = ({shown})=>{
         }
     },[]);
     // New code
-    const handleShow = (e)=>{
+/*     const handleShow = (e)=>{
         setShow(true);
-    }
+    } */
     
     const handleClose = () => {
         setShow(false);
