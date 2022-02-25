@@ -1,0 +1,24 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-18.04
+
+variables:
+  imageName: 'sa-taxi-edw/carto-react-docker'
+  containerReg: 'azure_devops_gcp_service'
+
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: $(containerReg)
+    repository: $(imageName)
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      latest
