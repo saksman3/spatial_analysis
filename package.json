@@ -53,7 +53,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-app-rewired --max-old-space-size=2048 build",
+    "build": "react-scripts --max-old-space-size=2048 build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint './**/*.{js,jsx}' --ignore-path .gitignore",
