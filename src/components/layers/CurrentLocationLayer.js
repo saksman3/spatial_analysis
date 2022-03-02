@@ -23,7 +23,7 @@ export default function CurrentLocationLayer() {
       onHover: (info) => {
         if (info?.object) {
           info.object = {
-            html: htmlForFeature({ feature: info.object }),
+            html: htmlForFeature({ feature: info.object, includeColumns: ['Name', 'timestamp', 'MovingInd', 'DistanceToday', 'DistanceYesterday', 'Distance7Days', 'DistanceMTD', 'L3MDistance', 'AccountNumber', 'SATaxiCDState', 'SalesSourceName', 'RouteMap', 'GuardriskPolicyInd', 'RiskGrade', 'DealerName', 'Expsosure', 'ArrearsAmount', 'InstalmentsRemaining', 'VehicleDescription', 'StatusGrouping'] }),
             style: {},
           };
         }
