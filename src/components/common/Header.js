@@ -181,7 +181,7 @@ function AppName() {
 function SATaxiLogo() {
   return (
     <>
-      <img src='../img/Logo_White.png' height='25px'></img><span>&nbsp;|&nbsp;</span>
+      <span>&nbsp;|&nbsp;</span><img src='../img/Logo_White.png' height='25px'></img>
     </>
   )
 }
