@@ -52,7 +52,7 @@ export default function CurrentLocation() {
       <Grid item>
         <div>
 
-          <TimeSeriesWidget
+          {/*<TimeSeriesWidget
             id='dayCount'
             title='Number of Days'
             dataSource={currentLocationSource.id}
@@ -61,7 +61,7 @@ export default function CurrentLocation() {
             operation={(AggregationTypes.COUNT)}
             stepSize={GroupDateTypes.DAYS}
             //formatter={dateFormatter}
-          />
+          />*/}
   
           <Divider />
 
