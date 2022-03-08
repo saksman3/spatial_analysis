@@ -217,13 +217,20 @@ function NavigationMenu({ column: vertical }) {
         orientation={vertical ? 'vertical' : 'horizontal'}
         variant={vertical ? 'fullWidth' : 'standard'}
       >
-        <Tab label='Home' value='' component={NavLink} to={ROUTE_PATHS.DEFAULT} />
-        {/* [hygen] Import links */}
+        <Tab label='Home' value='' component={NavLink} to={ROUTE_PATHS.CURRENT_LOCATION} />
+        {/* [hygen] Import links 
         <Tab
           label='Current location'
           value='current_location'
           component={NavLink}
           to={ROUTE_PATHS.CURRENT_LOCATION}
+          className={classes.navLink}
+        />*/}
+        <Tab
+          label='Route view'
+          value='dashboard/route_view'
+          component={NavLink}
+          to={ROUTE_PATHS.ROUTE_VIEW}
           className={classes.navLink}
         />
       </Tabs>

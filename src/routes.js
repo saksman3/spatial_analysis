@@ -7,14 +7,16 @@ const NotFound = lazy(() => import('components/views/NotFound'));
 const Login = lazy(() => import('components/views/Login'));
 const CurrentLocation = lazy(() => import('components/views/CurrentLocation.js'));
 const Logout = lazy(()=> import('components/views/Logout.js'));
+const RouteView = lazy(() => import('components/views/RouteView.js'));
 // [hygen] Import views
 
 export const ROUTE_PATHS = {
   LOGIN: '/',
-  DEFAULT: '/dashboard/currentLocation',
+  DEFAULT: '/dashboard/',
   NOT_FOUND: '/404',
   CURRENT_LOCATION: '/dashboard/currentLocation',
-  LOGOUT:'logout'
+  LOGOUT:'logout',
+  ROUTE_VIEW: '/dashboard/route_view',
   // [hygen] Add path routes
 };
 
@@ -32,6 +34,7 @@ const routes = [
       // { path: '/', element: <Navigate to='/<your default view>' /> },
       { path: ROUTE_PATHS.CURRENT_LOCATION, element: <CurrentLocation /> },
       {path: ROUTE_PATHS.LOGOUT, element:<Logout shown={true}/>},
+      { path: ROUTE_PATHS.ROUTE_VIEW, element: <RouteView /> },
       // [hygen] Add routes
     ],
   },
