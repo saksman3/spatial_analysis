@@ -228,7 +228,7 @@ function NavigationMenu({ column: vertical }) {
         />*/}
         <Tab
           label='Route view'
-          value='dashboard/route_view'
+          value=''
           component={NavLink}
           to={ROUTE_PATHS.ROUTE_VIEW}
           className={classes.navLink}
