@@ -69,13 +69,14 @@ FROM(SELECT dealnumber as AccountNumber
 , ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude, coordinate_latitude)
 ORDER BY timestamp)) as geom
 FROM sa-taxi-edw.cartrack.current_location
-WHERE partition_date >= DATE_SUB(Current_Date, INTERVAL 7 DAY)
-and timestamp >= DATE_SUB(Current_Date, INTERVAL 7 DAY)
+WHERE partition_date between  '${formattedStartDate}' and '${formattedEndDate}'
+and timestamp between '${formattedStartDate}' and '${formattedEndDate}'
 and dealnumber = '${account}'
 group by 1
 ) a
 join sa-taxi-edw.analytics.account_summary_new b
 on a.AccountNumber = b.AccountNumber`;
+console.log(query);
      routeViewSource.data = query
      dispatch(addSource(routeViewSource))
      dispatch(
