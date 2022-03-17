@@ -27,8 +27,6 @@ export default function RouteView() {
   const classes = useStyles();
   const [accounts,setAccounts] = useState([]);
   const [filteredAccount,setFilteredAccount] = useState("");
-  const [selectedStartDate, setSelectedStartDate] = useState("");
-  const [selectedEndDate, setSelectedEndDate] = useState("");
   //use react state to set start and end date default should be 7 days ago from now.
   const [Range,setDateRange] = useState([{
     
@@ -54,31 +52,29 @@ export default function RouteView() {
   })
 
   const RetrieveData = (account)=>{
-    // this method will fetch data when user clicked on search button.
-     setFilteredAccount(account);
+    // this method will fetch data when user clicked on search button. an argument of account is expected to be passed into it 
      const formattedEndDate = format(Range[0].endDate,"yyyy-MM-dd");
      const formattedStartDate = format(Range[0].startDate,"yyyy-MM-dd")
-     setSelectedStartDate(formattedStartDate);
-     setSelectedEndDate(formattedEndDate);
      const query = `SELECT a.AccountNumber, a.RouteUID, a.RouteMap, ST_GeogFromText(b.route_polyline) as geom,'APRROVED ROUTE' as RouteType 
-FROM sa-taxi-edw.analytics.account_summary_new a 
-join sa-taxi-edw.geography.route_map b
-on cast(a.RouteUID as INT64) = b.route_uid 
-WHERE ACCOUNTNUMBER = '${account}' UNION ALL SELECT a.AccountNumber, RouteUID, RouteMap, geom, 'ACTUAL ROUTE' as RouteType
-FROM(SELECT dealnumber as AccountNumber
-, ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude, coordinate_latitude)
-ORDER BY timestamp)) as geom
-FROM sa-taxi-edw.cartrack.current_location
-WHERE partition_date between  '${formattedStartDate}' and '${formattedEndDate}'
-and timestamp between '${formattedStartDate}' and '${formattedEndDate}'
-and dealnumber = '${account}'
-group by 1
-) a
-join sa-taxi-edw.analytics.account_summary_new b
-on a.AccountNumber = b.AccountNumber`;
-console.log(query);
-     routeViewSource.data = query
-     dispatch(addSource(routeViewSource))
+                    FROM sa-taxi-edw.analytics.account_summary_new a 
+                    join sa-taxi-edw.geography.route_map b
+                    on cast(a.RouteUID as INT64) = b.route_uid 
+                    WHERE ACCOUNTNUMBER = '${account}' UNION ALL SELECT a.AccountNumber, RouteUID, RouteMap, geom, 'ACTUAL ROUTE' as RouteType
+                    FROM(SELECT dealnumber as AccountNumber
+                    , ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude, coordinate_latitude)
+                    ORDER BY timestamp)) as geom
+                    FROM sa-taxi-edw.cartrack.current_location
+                    WHERE partition_date between '${formattedStartDate}' and '${formattedEndDate}'
+                    and timestamp between '${formattedStartDate}' and '${formattedEndDate}'
+                    and dealnumber = '${account}'
+                    group by 1
+                    ) a
+                    join sa-taxi-edw.analytics.account_summary_new b
+                    on a.AccountNumber = b.AccountNumber`;
+     console.log(query);
+     routeViewSource.data = query // update the query to be executed.
+     // re-render the map with the new source filters.
+     dispatch(addSource(routeViewSource)) 
      dispatch(
       addLayer({
         id: ROUTE_VIEW_LAYER_ID,
@@ -88,9 +84,7 @@ console.log(query);
 
   }
   const handleDateSelect=(ranges)=>{
-    console.log(ranges.selection);
     setDateRange([ranges.selection])
-    
   }
   useEffect(() => {
     dispatch(addSource(routeViewSource));
@@ -112,6 +106,8 @@ console.log(query);
 
   return (
     <Grid container direction='column' className={classes.routeView}> 
+    { /* include the search bar component, 
+      it expects data which is the list of objects, Retrieve data which is the function that fetches data from source when you click on search */}
       <SearchBar 
       placeholder="Search Account" 
       data={accounts}

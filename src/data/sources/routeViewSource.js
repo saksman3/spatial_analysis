@@ -4,16 +4,15 @@ const query = `SELECT a.AccountNumber, a.RouteUID, a.RouteMap, ST_GeogFromText(b
 FROM sa-taxi-edw.analytics.account_summary_new a 
 join sa-taxi-edw.geography.route_map b
 on cast(a.RouteUID as INT64) = b.route_uid 
-WHERE ACCOUNTNUMBER = '112219:115473'
-UNION ALL 
-SELECT a.AccountNumber, RouteUID, RouteMap, geom, 'ACTUAL ROUTE' as RouteType
+--WHERE ACCOUNTNUMBER 
+UNION ALL SELECT a.AccountNumber, RouteUID, RouteMap, geom, 'ACTUAL ROUTE' as RouteType
 FROM(SELECT dealnumber as AccountNumber
 , ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude, coordinate_latitude)
 ORDER BY timestamp)) as geom
 FROM sa-taxi-edw.cartrack.current_location
-WHERE partition_date >= DATE_SUB(Current_Date, INTERVAL 7 DAY)
+WHERE  partition_date >= DATE_SUB(Current_Date, INTERVAL 7 DAY)
 and timestamp >= DATE_SUB(Current_Date, INTERVAL 7 DAY)
-and dealnumber = '112219:115473'
+--and 
 group by 1
 ) a
 join sa-taxi-edw.analytics.account_summary_new b
@@ -24,7 +23,7 @@ const source = {
   id: ROUTE_VIEW_SOURCE_ID,
   type: MAP_TYPES.QUERY,
   connection: 'sa_taxi_default',
-  data: query //"SELECT AccountNumber,cast(RouteUID as INT64) FROM sa-taxi-edw.analytics.account_summary_new"
+  data: query 
 };
 
 export default source;
