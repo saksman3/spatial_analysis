@@ -7,11 +7,14 @@ import htmlForFeature from 'utils/htmlForFeature';
 export const CURRENT_LOCATION_LAYER_ID = 'currentLocationLayer';
 
 const COLORSRGB = [
-  [255, 0, 0],
-  [0, 255, 0],
-  [0, 0, 255],
+  [0, 240, 255],
+  [255, 145, 0],
+  [110, 227, 0],
+  [255, 224, 0],
+  [255, 54, 0],
+  [140, 0, 230],
   [255, 0, 255],
-  [255, 255, 0],
+  [0, 68, 224]
 ];
 
 export default function CurrentLocationLayer() {
@@ -25,16 +28,22 @@ export default function CurrentLocationLayer() {
       id: CURRENT_LOCATION_LAYER_ID,
       //getFillColor: [241, 109, 122],
       getFillColor: (object) => {
-        if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Toyota') {
+        if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Mercedes') {
           return COLORSRGB[0];
-        } else if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Nissan') {
+        } else if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'VW') {
           return COLORSRGB[1];
-        } else if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Mercedes') {
+        } else if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Nissan') {
           return COLORSRGB[2];
-        } else if (object.properties.VehicleType == 'Open Market Insurance') {
+        } else if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Iveco') {
           return COLORSRGB[3];
-        } else {
+        } else if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Toyota') {
           return COLORSRGB[4];
+        } else if (object.properties.VehicleType !== 'Open Market Insurance' && object.properties.Manufacture == 'Cam') {
+          return COLORSRGB[5];
+        } else if (object.properties.VehicleType == 'Open Market Insurance') {
+          return COLORSRGB[6];
+        } else {
+          return COLORSRGB[7];
         }
       },
       pointRadiusMinPixels: 3,

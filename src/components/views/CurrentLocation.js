@@ -20,6 +20,16 @@ import { TimeSeriesWidget, FormulaWidget, PieWidget } from '@carto/react-widgets
 //Global Variables
 const customFormatter = (value) => `${value}`.substring(0, `${value}`.indexOf(`.`)).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + ` km`;
 const customCount = (value) => `${value}`.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+const COLORSHEX = [
+  '#000000',
+  '#4E4E4E',
+  '#6F6F6F',
+  '#858585',
+  '#979797',
+  '#A7A7A7',
+  '#B5B5B5',
+  '#D5D5D5'
+];
 
 const useStyles = makeStyles(() => ({
   currentLocation: {},
@@ -51,20 +61,6 @@ export default function CurrentLocation() {
     <Grid container direction='column' className={classes.currentLocation}>
       <Grid item>
         <div>
-
-          {/*<TimeSeriesWidget
-            id='dayCount'
-            title='Number of Days'
-            dataSource={currentLocationSource.id}
-            column='timestamp'
-            operationColumn='vehicleid'
-            operation={(AggregationTypes.COUNT)}
-            stepSize={GroupDateTypes.DAYS}
-            //formatter={dateFormatter}
-          />*/}
-  
-          <Divider />
-
           <FormulaWidget
             id='numVehicles'
             title='Number of Vehicles'
@@ -129,6 +125,7 @@ export default function CurrentLocation() {
             column='Manufacture'
             operationColumn='vehicleid'
             operation={AggregationTypes.COUNT}
+            colors={[COLORSHEX[0], COLORSHEX[1], COLORSHEX[2], COLORSHEX[3], COLORSHEX[4], COLORSHEX[5]]}
           />
           
           <Divider />
@@ -140,6 +137,7 @@ export default function CurrentLocation() {
             column='VehicleType'
             operationColumn='vehicleid'
             operation={AggregationTypes.COUNT}
+            colors={[COLORSHEX[0], COLORSHEX[5]]}
           />
         </div>
       </Grid>
