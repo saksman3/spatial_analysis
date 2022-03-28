@@ -17,8 +17,15 @@ export default function RouteViewLayer() {
       id: ROUTE_VIEW_LAYER_ID,
       getFillColor: [241, 109, 122],
       pointRadiusMinPixels: 2,
-      getLineColor: [255, 0, 0],
-      lineWidthMinPixels: 1,
+      //getLineColor: [255, 0, 0],
+      getLineColor: (object) => {
+        if (object.properties.RouteType == 'APPROVED ROUTE') {
+          return [0, 0, 255];
+        } else {
+          return [255, 0, 0];
+        }
+      },
+      lineWidthMinPixels: 2,
       pickable: true,
       onHover: (info) => {
         if (info?.object) {
