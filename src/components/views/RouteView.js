@@ -37,6 +37,7 @@ export default function RouteView() {
   const [NCPointCount, setNC] = useState("");
   const [WCPointCount, setWC] = useState("");
   const [ECPointCount, setEC] = useState("");
+  const [ApprovedRoute, setApprovedRoute] = useState("");
   //use react state to set start and end date default should be 7 days ago from now.
   const [Range, setDateRange] = useState([{
 
@@ -84,94 +85,94 @@ export default function RouteView() {
                     join sa-taxi-edw.analytics.account_summary_new b
                     on a.AccountNumber = b.AccountNumber`;
     const provinceQuery = `SELECT
-    g.*,
-    a.RouteUID,
-    a.RouteMap,
-    ST_Buffer(ST_GeogFromText(route_polyline),
-      300,
-      8.0,
-      endcap=>'flat') WKT_Approved,
-    ST_DIFFERENCE(WKT_Actual,
-      ST_Buffer(ST_GeogFromText(route_polyline),
-        300,
-        8.0,
-        endcap=>'flat')) AS WKT_OffRoute,
-    ST_LENGTH(WKT_Actual) AS ActualDistance,
-    ST_LENGTH(ST_DIFFERENCE(WKT_Actual,
-        ST_Buffer(ST_GeogFromText(route_polyline),
-          100,
-          8.0,
-          endcap=>'flat'))) AS OffRouteDistance
-  FROM (
-    SELECT
-      vehicleid,
-      DATE(timestamp) AS DayOfMonth,
-      ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude,
-            coordinate_latitude)
-        ORDER BY
-          timestamp)) AS WKT_Actual,
-      SUM(
-      IF
-        (PR_NAME = 'Gauteng',
-          1,
-          0)) AS GautengPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'KwaZulu-Natal',
-          1,
-          0)) AS KZNPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'Mpumalanga',
-          1,
-          0)) AS MPPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'Limpopo',
-          1,
-          0)) AS LPPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'North West',
-          1,
-          0)) AS NWPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'Free State',
-          1,
-          0)) AS FSPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'Northern Cape',
-          1,
-          0)) AS NCPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'Western Cape',
-          1,
-          0)) AS WCPointCount,
-      SUM(
-      IF
-        (PR_NAME = 'Eastern Cape',
-          1,
-          0)) AS ECPointCount
-    FROM
-      sa-taxi-edw.cartrack.current_location C
-    WHERE
-      dealnumber = '${account}'
-      AND partition_date between '${formattedStartDate}' and '${formattedEndDate}'
-      AND timestamp between '${formattedStartDate}' and '${formattedEndDate}'
-    GROUP BY
-      1,
-      2 ) G
-  LEFT JOIN
-    sa-taxi-edw.analytics.account_summary_new a
-  ON
-    a.VehicleID = g.VehicleID
-  LEFT JOIN
-    sa-taxi-edw.geography.route_map R
-  ON
-    CAST(R.route_uid AS string) = a.RouteUID`;
+                            g.*,
+                            a.RouteUID,
+                            a.RouteMap,
+                            ST_Buffer(ST_GeogFromText(route_polyline),
+                              300,
+                              8.0,
+                              endcap=>'flat') WKT_Approved,
+                            ST_DIFFERENCE(WKT_Actual,
+                              ST_Buffer(ST_GeogFromText(route_polyline),
+                                300,
+                                8.0,
+                                endcap=>'flat')) AS WKT_OffRoute,
+                            ST_LENGTH(WKT_Actual) AS ActualDistance,
+                            ST_LENGTH(ST_DIFFERENCE(WKT_Actual,
+                                ST_Buffer(ST_GeogFromText(route_polyline),
+                                  100,
+                                  8.0,
+                                  endcap=>'flat'))) AS OffRouteDistance
+                          FROM (
+                            SELECT
+                              vehicleid,
+                              DATE(timestamp) AS DayOfMonth,
+                              ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude,
+                                    coordinate_latitude)
+                                ORDER BY
+                                  timestamp)) AS WKT_Actual,
+                              SUM(
+                              IF
+                                (PR_NAME = 'Gauteng',
+                                  1,
+                                  0)) AS GautengPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'KwaZulu-Natal',
+                                  1,
+                                  0)) AS KZNPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'Mpumalanga',
+                                  1,
+                                  0)) AS MPPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'Limpopo',
+                                  1,
+                                  0)) AS LPPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'North West',
+                                  1,
+                                  0)) AS NWPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'Free State',
+                                  1,
+                                  0)) AS FSPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'Northern Cape',
+                                  1,
+                                  0)) AS NCPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'Western Cape',
+                                  1,
+                                  0)) AS WCPointCount,
+                              SUM(
+                              IF
+                                (PR_NAME = 'Eastern Cape',
+                                  1,
+                                  0)) AS ECPointCount
+                            FROM
+                              sa-taxi-edw.cartrack.current_location C
+                            WHERE
+                              dealnumber = '${account}'
+                              AND partition_date >= '${formattedStartDate}' and partition_date <= '${formattedEndDate}'
+                              AND timestamp >= '${formattedStartDate}' and date(timestamp) <= '${formattedEndDate}'
+                            GROUP BY
+                              1,
+                              2 ) G
+                          LEFT JOIN
+                            sa-taxi-edw.analytics.account_summary_new a
+                          ON
+                            a.VehicleID = g.VehicleID
+                          LEFT JOIN
+                            sa-taxi-edw.geography.route_map R
+                          ON
+                            CAST(R.route_uid AS string) = a.RouteUID`;
 console.log(formattedStartDate, formattedEndDate);
     fetch('https://gcp-europe-west1.api.carto.com/v3/sql/sa_taxi_default/query', {
       method: 'POST',
@@ -185,7 +186,9 @@ console.log(formattedStartDate, formattedEndDate);
     })
       .then(response => response.json())
       .then(json_data => {
-        console.log(json_data.rows)
+        //console.log(json_data.rows[0].RouteMap)
+        const data = json_data.rows
+        setApprovedRoute(data[0].RouteMap)
       })
       .catch(err => console.log(err))
     //console.log(query);
@@ -245,8 +248,12 @@ console.log(formattedStartDate, formattedEndDate);
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Approved Route</h6>
         <br />
-      <span class="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;VALUE</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ApprovedRoute}</span>
 
+      <Divider />
+      <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
+        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Per Province</h6>
+        <br />
     </Grid>
   );
 }
