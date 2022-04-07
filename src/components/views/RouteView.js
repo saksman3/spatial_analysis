@@ -18,6 +18,7 @@ import SearchBar from './SearchBar';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Divider } from '@material-ui/core';
+import '../css/sidebardiv.css';
 
 const useStyles = makeStyles(() => ({
   routeView: {},
@@ -87,6 +88,8 @@ export default function RouteView() {
     const provinceQuery = `SELECT
                             G.vehicleid,
                             G.dealnumber,
+                            R.route_uid,
+                            R.route_map,
                             DayOfmonth,
                             GPPointCount,
                             KZNPointCount,
@@ -196,10 +199,10 @@ console.log(formattedStartDate, formattedEndDate);
     })
       .then(response => response.json())
       .then(json_data => {
-        //console.log(json_data.rows[0].RouteMap)
-        console.log(json_data)
+        console.log(json_data.rows[0].route_map)
+        //console.log(json_data)
         const data = json_data.rows
-        setApprovedRoute(data[0].RouteMap)
+        setApprovedRoute(data[0].route_map)
       })
       .catch(err => console.log(err))
     //console.log(query);
@@ -259,8 +262,10 @@ console.log(formattedStartDate, formattedEndDate);
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Approved Route</h6>
         <br />
-      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ApprovedRoute}</span>
-
+      <div className="approvedroute MuiBox-root MuiBox-root-47 makeStyles-root-44">
+        {ApprovedRoute}
+        <br />
+      </div>
       <Divider />
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Per Province</h6>
