@@ -85,93 +85,103 @@ export default function RouteView() {
                     join sa-taxi-edw.analytics.account_summary_new b
                     on a.AccountNumber = b.AccountNumber`;
     const provinceQuery = `SELECT
-                            g.*,
-                            a.RouteUID,
-                            a.RouteMap,
+                            G.vehicleid,
+                            G.dealnumber,
+                            DayOfmonth,
+                            GPPointCount,
+                            KZNPointCount,
+                            MPPointCount,
+                            LPPointCount,
+                            NWPointCount,
+                            FSPointCount,
+                            NCPointCount,
+                            WCPointCount,
+                            ECPointCount,
+                            (GPPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as GPPointPercentage,
+                            (KZNPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as KZNPointPercentage,
+                            (MPPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as MPPointPercentage,
+                            (LPPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as LPPointPercentage,
+                            (FSPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as FSPointPercentage,
+                            (NWPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as NWPointPercentage,
+                            (ECPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as ECPointPercentage,
+                            (NCPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as NCPointPercentage,
+                            (WCPointCount/(GPPointCount + KZNPointCount + MPPointCount + LPPointCount + FSPointCount + NWPointCount + ECPointCount + NCPointCount + WCPointCount)) * 100 as WCPointPercentage,
+                            ST_LENGTH(WKT_Actual)/1000 AS ActualDistance_km,
+                            (ST_LENGTH(ST_DIFFERENCE(WKT_Actual,
                             ST_Buffer(ST_GeogFromText(route_polyline),
-                              300,
-                              8.0,
-                              endcap=>'flat') WKT_Approved,
-                            ST_DIFFERENCE(WKT_Actual,
-                              ST_Buffer(ST_GeogFromText(route_polyline),
-                                300,
-                                8.0,
-                                endcap=>'flat')) AS WKT_OffRoute,
-                            ST_LENGTH(WKT_Actual) AS ActualDistance,
-                            ST_LENGTH(ST_DIFFERENCE(WKT_Actual,
-                                ST_Buffer(ST_GeogFromText(route_polyline),
-                                  100,
-                                  8.0,
-                                  endcap=>'flat'))) AS OffRouteDistance
-                          FROM (
+                            100,
+                            8.0,
+                            endcap=>'flat'))))/1000 AS OffRouteDistance_km
+                            FROM (
                             SELECT
-                              vehicleid,
-                              DATE(timestamp) AS DayOfMonth,
-                              ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude,
-                                    coordinate_latitude)
-                                ORDER BY
-                                  timestamp)) AS WKT_Actual,
-                              SUM(
-                              IF
-                                (PR_NAME = 'Gauteng',
-                                  1,
-                                  0)) AS GautengPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'KwaZulu-Natal',
-                                  1,
-                                  0)) AS KZNPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'Mpumalanga',
-                                  1,
-                                  0)) AS MPPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'Limpopo',
-                                  1,
-                                  0)) AS LPPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'North West',
-                                  1,
-                                  0)) AS NWPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'Free State',
-                                  1,
-                                  0)) AS FSPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'Northern Cape',
-                                  1,
-                                  0)) AS NCPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'Western Cape',
-                                  1,
-                                  0)) AS WCPointCount,
-                              SUM(
-                              IF
-                                (PR_NAME = 'Eastern Cape',
-                                  1,
-                                  0)) AS ECPointCount
+                            vehicleid,
+                            dealnumber,
+                            DATE(timestamp) AS DayOfMonth,
+                            ST_MakeLine(ARRAY_AGG(ST_GeogPoint(coordinate_longitude,
+                            coordinate_latitude)
+                            ORDER BY
+                            timestamp)) AS WKT_Actual,
+                            SUM(
+                            IF
+                            (PR_NAME = 'Gauteng',
+                            1,
+                            0)) AS GPPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'KwaZulu-Natal',
+                            1,
+                            0)) AS KZNPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'Mpumalanga',
+                            1,
+                            0)) AS MPPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'Limpopo',
+                            1,
+                            0)) AS LPPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'North West',
+                            1,
+                            0)) AS NWPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'Free State',
+                            1,
+                            0)) AS FSPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'Northern Cape',
+                            1,
+                            0)) AS NCPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'Western Cape',
+                            1,
+                            0)) AS WCPointCount,
+                            SUM(
+                            IF
+                            (PR_NAME = 'Eastern Cape',
+                            1,
+                            0)) AS ECPointCount
                             FROM
-                              sa-taxi-edw.cartrack.current_location C
+                            sa-taxi-edw.cartrack.current_location C
                             WHERE
-                              dealnumber = '${account}'
-                              AND partition_date >= '${formattedStartDate}' and partition_date <= '${formattedEndDate}'
-                              AND timestamp >= '${formattedStartDate}' and date(timestamp) <= '${formattedEndDate}'
+                            dealnumber = '${account}'
+                            AND partition_date >= '${formattedStartDate}' and partition_date <= '${formattedEndDate}'
+                            AND timestamp >= '${formattedStartDate}' and date(timestamp) <= '${formattedEndDate}'
                             GROUP BY
-                              1,
-                              2 ) G
-                          LEFT JOIN
+                            1,
+                            2,3 ) G
+                            LEFT JOIN
                             sa-taxi-edw.analytics.account_summary_new a
-                          ON
+                            ON
                             a.VehicleID = g.VehicleID
-                          LEFT JOIN
+                            LEFT JOIN
                             sa-taxi-edw.geography.route_map R
-                          ON
+                            ON
                             CAST(R.route_uid AS string) = a.RouteUID`;
 console.log(formattedStartDate, formattedEndDate);
     fetch('https://gcp-europe-west1.api.carto.com/v3/sql/sa_taxi_default/query', {
@@ -187,6 +197,7 @@ console.log(formattedStartDate, formattedEndDate);
       .then(response => response.json())
       .then(json_data => {
         //console.log(json_data.rows[0].RouteMap)
+        console.log(json_data)
         const data = json_data.rows
         setApprovedRoute(data[0].RouteMap)
       })
