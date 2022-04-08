@@ -1,16 +1,18 @@
 .SearchInput{
-    margin-top: 30px;
-    margin-left: 30px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    margin-left: 20px;
+    /* margin-left: 30px; */
     display: flex;
 
 }
 .SearchBar input{
     background-color: rgb(248, 242, 242);
-    
+    margin-left: 0px;
     font-size: 18px;
-    padding:15px;
+    padding:15px 15px 0 15px;
     height: 30px !important;
-    /* width:210px*/
+    width:200px
 }
 .searchIcon{
  height: 60px;
@@ -22,7 +24,6 @@
 }
 
 .suggestion {
-   
     margin-left: 30px;
     width:239px;
     height: 200px;
@@ -56,5 +57,9 @@
   }
   #outlined-search{
       padding: 10px;
+  }
 
+  .rdrMonthAndYearPickers select {
+    color: #333333 !important;
+    background: #FFFFFF !important;
   }

@@ -29,7 +29,7 @@ export default function RouteView() {
   const classes = useStyles();
   const [accounts, setAccounts] = useState([]);
   const [filteredAccount, setFilteredAccount] = useState("");
-  const [GautengPointCount, setGP] = useState("");
+  const [GautengPointCount, setGP] = useState(0);
   const [KZNPointCount, setKZN] = useState("");
   const [MPPointCount, setMP] = useState("");
   const [LPPointCount, setLP] = useState("");
@@ -39,6 +39,8 @@ export default function RouteView() {
   const [WCPointCount, setWC] = useState("");
   const [ECPointCount, setEC] = useState("");
   const [ApprovedRoute, setApprovedRoute] = useState("");
+  const [ActualRouteDistanceKM, setActualRouteDistanceKM] = useState(0);
+  const [OffRouteDistanceKM, setOffRouteDistanceKM] = useState(0);
   //use react state to set start and end date default should be 7 days ago from now.
   const [Range, setDateRange] = useState([{
 
@@ -186,7 +188,6 @@ export default function RouteView() {
                             sa-taxi-edw.geography.route_map R
                             ON
                             CAST(R.route_uid AS string) = a.RouteUID`;
-console.log(formattedStartDate, formattedEndDate);
     fetch('https://gcp-europe-west1.api.carto.com/v3/sql/sa_taxi_default/query', {
       method: 'POST',
       headers: {
@@ -199,10 +200,81 @@ console.log(formattedStartDate, formattedEndDate);
     })
       .then(response => response.json())
       .then(json_data => {
-        console.log(json_data.rows[0].route_map)
-        //console.log(json_data)
+        //console.log(json_data.rows[0].RouteMap)
+        let num_of_days = json_data.rows.length
         const data = json_data.rows
+        console.log(json_data.rows)
         setApprovedRoute(data[0].route_map)
+        //get gp average
+        let GPreducer = (acc, currVal) => {
+
+          return acc + currVal.GPPointPercentage
+        }
+        setGP((data.reduce(GPreducer, 0) / num_of_days).toFixed(2))
+        //get KZN average
+        let KZNreducer = (acc, currVal) => {
+
+          return acc + currVal.KZNPointPercentage
+        }
+        setKZN((data.reduce(KZNreducer, 0) / num_of_days).toFixed(2))
+
+        //get Mp average
+        let MPreducer = (acc, currVal) => {
+
+          return acc + currVal.MPPointPercentage
+        }
+        setMP((data.reduce(MPreducer, 0) / num_of_days).toFixed(2))
+        // get LP average
+        let LPreducer = (acc, currVal) => {
+
+          return acc + currVal.LPPointPercentage
+        }
+        setLP((data.reduce(LPreducer, 0) / num_of_days).toFixed(2))
+         // get NW average
+        
+        let NWreducer = (acc, currVal) => {
+
+          return acc + currVal.NWPointPercentage
+        }
+        setNW((data.reduce(NWreducer, 0) / num_of_days).toFixed(2))
+
+
+        // get FS Average
+        let FSreducer = (acc, currVal) => {
+
+          return acc + currVal.FSPointPercentage
+        }
+        setFS((data.reduce(FSreducer, 0) / num_of_days).toFixed(2))
+
+
+        // get NC average
+        let NCreducer = (acc, currVal) => {
+
+          return acc + currVal.NCPointPercentage
+        }
+        setNC(data.reduce(NCreducer, 0) / num_of_days)
+
+
+        // WC average
+        let WCreducer = (acc, currVal) => {
+
+          return acc + currVal.WCPointPercentage
+        }
+        setWC(data.reduce(WCreducer, 0) / num_of_days)
+
+        // get EC average
+        let ECreducer = (acc, currVal) => {
+
+          return acc + currVal.ECPointPercentage
+        }
+        setEC(data.reduce(ECreducer, 0) / num_of_days)
+
+        //get actual distance sum
+        let actual_distance_reducer = (accumulator, currentValue) => accumulator + currentValue.ActualDistance_km
+        setActualRouteDistanceKM((data.reduce(actual_distance_reducer,0).toFixed(2)));
+        // get off route total
+        let off_route_distance_reducer = (accumulator, currentValue) => accumulator + currentValue.OffRouteDistance_km
+        setOffRouteDistanceKM((data.reduce(off_route_distance_reducer, 0).toFixed(2)))
       })
       .catch(err => console.log(err))
     //console.log(query);
@@ -243,6 +315,7 @@ console.log(formattedStartDate, formattedEndDate);
     <Grid container direction='column' className={classes.routeView}>
       { /* include the search bar component, 
       it expects data which is the list of objects, Retrieve data which is the function that fetches data from source when you click on search */}
+      
       <SearchBar
         placeholder="Search Account"
         data={accounts}
@@ -258,7 +331,8 @@ console.log(formattedStartDate, formattedEndDate);
         monthDisplayFormat="MM"
       />
 
-      <Divider />
+      <Divider/>
+
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Approved Route</h6>
         <br />
@@ -266,10 +340,45 @@ console.log(formattedStartDate, formattedEndDate);
         {ApprovedRoute}
         <br />
       </div>
+
       <Divider />
+
+        <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
+          <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actual Route Distance KM</h6>
+      <div className="approvedroute">
+          <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{ActualRouteDistanceKM}</span>
+      </div>
+        <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Off Route Distance KM</h6>
+      <div className="approvedroute">
+          <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{OffRouteDistanceKM}</span>
+      </div>
+
+      <Divider />
+
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Per Province</h6>
         <br />
+      <div className="provincecontainer MuiBox-root MuiBox-root-47 makeStyles-root-44">
+        <div classname="provinceitem"><b>Gauteng</b></div>
+          <div classname="provinceitem">{GautengPointCount}</div>
+        <div classname="provinceitem"><b>Mpumalanga</b></div>
+          <div classname="provinceitem">{MPPointCount}</div>
+        <div classname="provinceitem"><b>Limpopo</b></div>
+          <div classname="provinceitem">{LPPointCount}</div>
+        <div classname="provinceitem"><b>North West</b></div>
+          <div classname="provinceitem">{NWPointCount}</div>
+        <div classname="provinceitem"><b>Eastern Cape</b></div>
+          <div classname="provinceitem">{ECPointCount}</div>
+        <div classname="provinceitem"><b>Kwazulu Natal</b></div>
+          <div classname="provinceitem">{KZNPointCount}</div>
+        <div classname="provinceitem"><b>Western Cape</b></div>
+          <div classname="provinceitem">{WCPointCount}</div>
+        <div classname="provinceitem"><b>Northern Cape</b></div>
+          <div classname="provinceitem">{NCPointCount}</div>
+        <div classname="provinceitem"><b>Free State</b></div>
+          <div classname="provinceitem">{FSPointCount}</div>
+      </div>
     </Grid>
   );
 }
