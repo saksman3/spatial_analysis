@@ -28,7 +28,7 @@ export default function RouteView() {
   const classes = useStyles();
   const [accounts, setAccounts] = useState([]);
   const [filteredAccount, setFilteredAccount] = useState("");
-  const [GautengPointCount, setGP] = useState("");
+  const [GautengPointCount, setGP] = useState(0);
   const [KZNPointCount, setKZN] = useState("");
   const [MPPointCount, setMP] = useState("");
   const [LPPointCount, setLP] = useState("");
@@ -87,6 +87,8 @@ export default function RouteView() {
     const provinceQuery = `SELECT
                             G.vehicleid,
                             G.dealnumber,
+                            R.route_uid,
+                            R.route_map,
                             DayOfmonth,
                             GPPointCount,
                             KZNPointCount,
@@ -183,7 +185,6 @@ export default function RouteView() {
                             sa-taxi-edw.geography.route_map R
                             ON
                             CAST(R.route_uid AS string) = a.RouteUID`;
-console.log(formattedStartDate, formattedEndDate);
     fetch('https://gcp-europe-west1.api.carto.com/v3/sql/sa_taxi_default/query', {
       method: 'POST',
       headers: {
@@ -197,9 +198,74 @@ console.log(formattedStartDate, formattedEndDate);
       .then(response => response.json())
       .then(json_data => {
         //console.log(json_data.rows[0].RouteMap)
-        console.log(json_data)
+        let num_of_days = json_data.rows.length
         const data = json_data.rows
-        setApprovedRoute(data[0].RouteMap)
+        console.log(json_data.rows)
+        setApprovedRoute(data[0].route_map)
+        //get gp average
+        let GPreducer = (acc, currVal) => {
+
+          return acc + currVal.GPPointPercentage
+        }
+        setGP(data.reduce(GPreducer, 0) / num_of_days)
+        //get KZN average
+        let KZNreducer = (acc, currVal) => {
+
+          return acc + currVal.KZNPointPercentage
+        }
+        setKZN(data.reduce(KZNreducer, 0) / num_of_days)
+
+        //get Mp average
+        let MPreducer = (acc, currVal) => {
+
+          return acc + currVal.MPPointPercentage
+        }
+        setMP(data.reduce(MPreducer, 0) / num_of_days)
+        // get LP average
+        let LPreducer = (acc, currVal) => {
+
+          return acc + currVal.LPPointPercentage
+        }
+        setLP(data.reduce(LPreducer, 0) / num_of_days)
+         // get NW average
+        
+        let NWreducer = (acc, currVal) => {
+
+          return acc + currVal.NWPointPercentage
+        }
+        setNW(data.reduce(NWreducer, 0) / num_of_days)
+
+
+        // get FS Average
+        let FSreducer = (acc, currVal) => {
+
+          return acc + currVal.FSPointPercentage
+        }
+        setFS(data.reduce(FSreducer, 0) / num_of_days)
+
+
+        // get NC average
+        let NCreducer = (acc, currVal) => {
+
+          return acc + currVal.NCPointPercentage
+        }
+        setNC(data.reduce(NCreducer, 0) / num_of_days)
+
+
+        // WC average
+        let WCreducer = (acc, currVal) => {
+
+          return acc + currVal.WCPointPercentage
+        }
+        setWC(data.reduce(WCreducer, 0) / num_of_days)
+
+        // get EC average
+        let ECreducer = (acc, currVal) => {
+
+          return acc + currVal.ECPointPercentage
+        }
+        setEC(data.reduce(ECreducer, 0) / num_of_days)
+
       })
       .catch(err => console.log(err))
     //console.log(query);
@@ -258,13 +324,23 @@ console.log(formattedStartDate, formattedEndDate);
       <Divider />
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Approved Route</h6>
-        <br />
+      <br />
       <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ApprovedRoute}</span>
 
       <Divider />
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
-        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Per Province</h6>
-        <br />
+        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg % Per Province</h6>
+      <br />
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GP {GautengPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MP {MPPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LP {LPPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NW {NWPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EC {ECPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KZN {KZNPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WC {WCPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NC {NCPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FS {FSPointCount}</span>
+      
     </Grid>
   );
 }

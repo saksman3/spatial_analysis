@@ -3,6 +3,7 @@ import {useState,useEffect} from "react";
 
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -17,7 +18,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-
+import './main.css'
 const FRONTEND_HOST = `${process.env.REACT_APP_FRONTEND_HOST}`
 const BACKEND_HOST = `${process.env.REACT_APP_BACKEND_HOST}`
 
@@ -45,7 +46,7 @@ const theme = createTheme({
 const Login = ()=>{
    const [email,setEmail] = useState('');
    const [password,setPassword] = useState('');
-   const [errors,setErrors] = useState(false);
+   const [errors,setErrors] = useState(null);
    const [loading, setLoading] = useState(true);
    
    useEffect(() =>{
@@ -63,7 +64,9 @@ const Login = ()=>{
            password
        };
        if(user.email&&user.password){
+
         setLoading(true);
+
        }
        // start of fetch
             fetch(`${BACKEND_HOST}/api/login`,{
@@ -80,13 +83,16 @@ const Login = ()=>{
                     Cookies.set('access_token', data.access_token)
                     console.log(Cookies.get('token'), Cookies.get("access_token"));
 
-                      window.location.replace(`${FRONTEND_HOST}/dashboard/currentlocation`);
+                    window.location.replace(`${FRONTEND_HOST}/dashboard/currentlocation`);
                     
                 }else{
                     setEmail('');
                     setPassword('');
                     Cookies.remove('token');
-                    setErrors(true);
+                    console.log(data)
+                    setErrors(data.detail);
+                    setLoading(false);
+                    
                 }
 
             })
@@ -123,6 +129,11 @@ const Login = ()=>{
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        {
+            errors !==null &&(
+              <Alert severity="error">{errors}</Alert>
+            )
+        }
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"

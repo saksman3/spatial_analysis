@@ -6,60 +6,70 @@ import { useState } from 'react';
 import '../css/searchstyle.css'
 
 
-const SearchBar = ({placeholder, data,RetrieveData})=>{
+const SearchBar = ({ placeholder, data, RetrieveData }) => {
 
     const [filtered, setFiltered] = useState([]);
-    const [val,setVal] = useState("");
-    const handleFilter = (e)=>{
+    const [val, setVal] = useState("");
+    const [disable, setDisable] = useState(true);
+    const [disabled, setDisabled] = useState(true);
+    const handleFilter = (e) => {
         // filters accounts based on what users typed on the search bar.
         const searchWord = e.target.value;
         setVal(searchWord); // tracks the value displayed on the 
-        const newFilteredData = data.filter((value)=>{
-              return value.AccountNumber.includes(searchWord);
+        const newFilteredData = data.filter((value) => {
+            return value.AccountNumber.includes(searchWord);
         });
-        if (searchWord===""){
+        if (searchWord === "") {
             setFiltered([]);
-        }else{
+        } else {
             setFiltered(newFilteredData);
         }
-        
+
     }
-   const handleItemClick = (e)=>{
+    const handleItemClick = (e) => {
         // handles account item click
         console.log(e.target.innerHTML);
         const item = e.target.innerHTML;
         setVal(item);
         setFiltered([]);
 
-   }
-   const handleRetrieveData = ()=>{
-        RetrieveData(val);
-   }
-   return  (
-       <div className="SearchBar">
-             <div className="SearchInput">
-                 <TextField id="outlined-search" 
-                 label="Search Account" 
-                 type="search" 
-                 size="small" 
-                 value={val}
-                 onChange={handleFilter}/>
+    }
+    const handleRetrieveData = () => {
+        if (val === "") {
+            window.alert("Please enter an account to search");
 
-                 <Button variant="outlined" 
-                 onClick={handleRetrieveData}
-                 >Search</Button>
+        } else {
+            RetrieveData(val);
+        }
+
+    }
+    return (
+        <div className="SearchBar">
+            <div className="SearchInput">
+                <TextField id="outlined-search"
+                    label="Search Account"
+                    type="search"
+                    size="small"
+                    value={val}
+
+                    onChange={handleFilter} />
+
+                <Button variant="outlined"
+                    {...disable === true && disabled}
+                    onClick={handleRetrieveData}
+                >Search</Button>
 
             </div>
-            { filtered.length !=0 &&(
+            {filtered.length != 0 && (
                 <div className="suggestion">
-               { 
-                  filtered.slice(0,15).map(account=>{
-                      return <div className='Item'  key={account.AccountNumber}><p onClick={handleItemClick}>{account.AccountNumber}</p></div>
-                  })
-               }
-               
-            </div> )}
-       </div>
-   );
+                    {
+                        filtered.slice(0, 15).map(account => {
+                            return <div className='Item' key={account.AccountNumber}><p onClick={handleItemClick}>{account.AccountNumber}</p></div>
+                        })
+                    }
+
+                </div>)}
+        </div>
+    );
 }
 export default SearchBar;
