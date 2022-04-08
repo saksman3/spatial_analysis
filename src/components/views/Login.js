@@ -18,7 +18,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import './main.css'
+import '../css/main.css'
+
 const FRONTEND_HOST = `${process.env.REACT_APP_FRONTEND_HOST}`
 const BACKEND_HOST = `${process.env.REACT_APP_BACKEND_HOST}`
 
