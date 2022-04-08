@@ -18,7 +18,6 @@ import SearchBar from './SearchBar';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Divider } from '@material-ui/core';
-import '../css/sidebardiv.css';
 
 const useStyles = makeStyles(() => ({
   routeView: {},
@@ -39,8 +38,6 @@ export default function RouteView() {
   const [WCPointCount, setWC] = useState("");
   const [ECPointCount, setEC] = useState("");
   const [ApprovedRoute, setApprovedRoute] = useState("");
-  const [ActualRouteDistanceKM, setActualRouteDistanceKM] = useState(0);
-  const [OffRouteDistanceKM, setOffRouteDistanceKM] = useState(0);
   //use react state to set start and end date default should be 7 days ago from now.
   const [Range, setDateRange] = useState([{
 
@@ -210,33 +207,33 @@ export default function RouteView() {
 
           return acc + currVal.GPPointPercentage
         }
-        setGP((data.reduce(GPreducer, 0) / num_of_days).toFixed(2))
+        setGP(data.reduce(GPreducer, 0) / num_of_days)
         //get KZN average
         let KZNreducer = (acc, currVal) => {
 
           return acc + currVal.KZNPointPercentage
         }
-        setKZN((data.reduce(KZNreducer, 0) / num_of_days).toFixed(2))
+        setKZN(data.reduce(KZNreducer, 0) / num_of_days)
 
         //get Mp average
         let MPreducer = (acc, currVal) => {
 
           return acc + currVal.MPPointPercentage
         }
-        setMP((data.reduce(MPreducer, 0) / num_of_days).toFixed(2))
+        setMP(data.reduce(MPreducer, 0) / num_of_days)
         // get LP average
         let LPreducer = (acc, currVal) => {
 
           return acc + currVal.LPPointPercentage
         }
-        setLP((data.reduce(LPreducer, 0) / num_of_days).toFixed(2))
+        setLP(data.reduce(LPreducer, 0) / num_of_days)
          // get NW average
         
         let NWreducer = (acc, currVal) => {
 
           return acc + currVal.NWPointPercentage
         }
-        setNW((data.reduce(NWreducer, 0) / num_of_days).toFixed(2))
+        setNW(data.reduce(NWreducer, 0) / num_of_days)
 
 
         // get FS Average
@@ -244,7 +241,7 @@ export default function RouteView() {
 
           return acc + currVal.FSPointPercentage
         }
-        setFS((data.reduce(FSreducer, 0) / num_of_days).toFixed(2))
+        setFS(data.reduce(FSreducer, 0) / num_of_days)
 
 
         // get NC average
@@ -269,12 +266,6 @@ export default function RouteView() {
         }
         setEC(data.reduce(ECreducer, 0) / num_of_days)
 
-        //get actual distance sum
-        let actual_distance_reducer = (accumulator, currentValue) => accumulator + currentValue.ActualDistance_km
-        setActualRouteDistanceKM((data.reduce(actual_distance_reducer,0).toFixed(2)));
-        // get off route total
-        let off_route_distance_reducer = (accumulator, currentValue) => accumulator + currentValue.OffRouteDistance_km
-        setOffRouteDistanceKM((data.reduce(off_route_distance_reducer, 0).toFixed(2)))
       })
       .catch(err => console.log(err))
     //console.log(query);
@@ -315,7 +306,6 @@ export default function RouteView() {
     <Grid container direction='column' className={classes.routeView}>
       { /* include the search bar component, 
       it expects data which is the list of objects, Retrieve data which is the function that fetches data from source when you click on search */}
-      
       <SearchBar
         placeholder="Search Account"
         data={accounts}
@@ -331,54 +321,26 @@ export default function RouteView() {
         monthDisplayFormat="MM"
       />
 
-      <Divider/>
-
+      <Divider />
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Approved Route</h6>
-        <br />
-      <div className="approvedroute MuiBox-root MuiBox-root-47 makeStyles-root-44">
-        {ApprovedRoute}
-        <br />
-      </div>
+      <br />
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ApprovedRoute}</span>
 
       <Divider />
-
-        <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
-          <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actual Route Distance KM</h6>
-      <div className="approvedroute">
-          <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{ActualRouteDistanceKM}</span>
-      </div>
-        <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Off Route Distance KM</h6>
-      <div className="approvedroute">
-          <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{OffRouteDistanceKM}</span>
-      </div>
-
-      <Divider />
-
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
-        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Per Province</h6>
-        <br />
-      <div className="provincecontainer MuiBox-root MuiBox-root-47 makeStyles-root-44">
-        <div classname="provinceitem"><b>Gauteng</b></div>
-          <div classname="provinceitem">{GautengPointCount}</div>
-        <div classname="provinceitem"><b>Mpumalanga</b></div>
-          <div classname="provinceitem">{MPPointCount}</div>
-        <div classname="provinceitem"><b>Limpopo</b></div>
-          <div classname="provinceitem">{LPPointCount}</div>
-        <div classname="provinceitem"><b>North West</b></div>
-          <div classname="provinceitem">{NWPointCount}</div>
-        <div classname="provinceitem"><b>Eastern Cape</b></div>
-          <div classname="provinceitem">{ECPointCount}</div>
-        <div classname="provinceitem"><b>Kwazulu Natal</b></div>
-          <div classname="provinceitem">{KZNPointCount}</div>
-        <div classname="provinceitem"><b>Western Cape</b></div>
-          <div classname="provinceitem">{WCPointCount}</div>
-        <div classname="provinceitem"><b>Northern Cape</b></div>
-          <div classname="provinceitem">{NCPointCount}</div>
-        <div classname="provinceitem"><b>Free State</b></div>
-          <div classname="provinceitem">{FSPointCount}</div>
-      </div>
+        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg % Per Province</h6>
+      <br />
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GP {GautengPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MP {MPPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LP {LPPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NW {NWPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;EC {ECPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KZN {KZNPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WC {WCPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NC {NCPointCount}</span>
+      <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FS {FSPointCount}</span>
+      
     </Grid>
   );
 }
