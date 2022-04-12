@@ -1,69 +1,39 @@
-# CARTO for React
+# CARTO for STACC
 
-Skeleton Template fo CARTO Cloud Native
+Skeleton Template for CARTO Cloud
 
 Welcome to CARTO for React! The best way to develop Location Intelligence Apps using CARTO Cloud Native platform + deck.gl. It will provide you a well designed structure following the best practices for modern frontend development and an integrated toolchain for testing, building and deploying your application.
 
-To get further information about this template visit our [documentation](https://github.com/CartoDB/carto-react-template).
 
-## Available Scripts
+# Getting Started.
+This project can run locally i.e. on your machine or deployed via a docker container. the steps below are meant to help you get the app running on your local machine and also deploying it using Azure DevOps.
+#  Running the project
+## Local Machine.
+### System Prerequisites
+- nodejs can be found [node](https://nodejs.org/en/) useful [steps](https://phoenixnap.com/kb/install-node-js-npm-on-windows)
+  
+- git installation steps [here](https://git-scm.com/downloads)
+- [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable) or npm package manager
 
-In the project directory, you can run:
+### project specific prerequisites will be install using npm or yarn depending on your preference
+using a terminal editor of your choice
+clone the repo: `git clone https://SATAXIBI@dev.azure.com/SATAXIBI/STACC%202.0/_git/STACC%202.0` this will clone the app into your machine in file STACC 2.0
+navigate into the cloned repo `cd STACC 2.0` and run:
+1. `npm install or yarn install` this will create node_modules folder and install all required packages.
+2. once the install has finished successfully run `npm start $env` 
+   replacing the $env with your env target there is .env.development this will force the app to target the development file and make the hosts for both apps to be localhost or 127.0.0.1.
+   Please note that if you don't specify which .env file to use the application will by defualt be pointing to the live environment.
+3. The app should open a browser and you should be able to visit the urls.
+4. Available Views:
+Login
+![login](src/assets/readme_files/login_screen.JPG)
+Current Location
+![currentLocation](src/assets/readme_files/current_location.JPG)
+Current Location filter vehicle
+![currentLocationFilterVehicles](src/assets/readme_files/current_location_vehicle_filters.JPG)
+Mercedes filter
+![merc_filter](src/assets/readme_files/mercedes_filter.JPG)
+Iveco Filter
+![IvecoFilter](src/assets/readme_files/iveco.JPG)
 
-### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [https://localhost:3000](https://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
