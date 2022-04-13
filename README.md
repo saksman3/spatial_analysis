@@ -41,10 +41,10 @@ more views [here](src/assets/readme_files/)
 
  - Release Pipelines
 
- ⋅⋅⋅this pipeline is used to pull the image from [google-container-registry](https://console.cloud.google.com/gcr/images/sa-taxi-edw?project=sa-taxi-edw)
+  ⋅⋅⋅this pipeline is used to pull the image from [google-container-registry](https://console.cloud.google.com/gcr/images/sa-taxi-edw?project=sa-taxi-edw)
 
-  -⋅⋅⋅[backend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/auth-api?project=sa-taxi-edw)
-  -⋅⋅⋅[frontend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/carto-react-docker?project=sa-taxi-edw)
+  - ⋅⋅⋅[backend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/auth-api?project=sa-taxi-edw)
+  - ⋅⋅⋅[frontend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/carto-react-docker?project=sa-taxi-edw)
 
  - It then re-deploys the container in google-cloud cloud run
  [frontend](https://sa-taxi-stacc-ffw76btnca-ew.a.run.app/). or [backend](https://carto-sa-taxi-stacc-auth-ffw76btnca-ew.a.run.app) depending on which repo you working on.
@@ -68,25 +68,3 @@ The screenshot below shows the steps that gets executed during the release
   #deploy the app
   gcloud run deploy sa-taxi-stacc --image gcr.io/sa-taxi-edw/carto-react-docker:latest --region=europe-west1 --quiet --port=80 --allow-unauthenticated
  ```
-
-
-
-
-
-
-1. First ordered list item
-2. Another item
-⋅⋅* Unordered sub-list. 
-1. Actual numbers don't matter, just that it's a number
-⋅⋅1. Ordered sub-list
-4. And another item.
-
-⋅⋅⋅You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
-
-⋅⋅⋅To have a line break without a paragraph, you will need to use two trailing spaces.⋅⋅
-⋅⋅⋅Note that this line is separate, but within the same paragraph.⋅⋅
-⋅⋅⋅(This is contrary to the typical GFM line break behaviour, where trailing spaces are not required.)
-
-* Unordered list can use asterisks
-- Or minuses
-+ Or pluses
