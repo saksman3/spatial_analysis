@@ -23,7 +23,7 @@ navigate into the cloned repo `cd STACC 2.0` and run:
 2. once the install has finished successfully run `npm start $env` 
    replacing the $env with your env target there is .env.development this will force the app to target the development file and make the hosts for both apps to be localhost or 127.0.0.1.
    Please note that if you don't specify which .env file to use the application will by defualt be pointing to the live environment.
-3. The app should open a browser and you should be able to visit the urls.
+3. The app should open a browser :wink:
 4. Available Views:
 ## Login
 ![login](src/assets/readme_files/login_screen.JPG)
@@ -69,9 +69,3 @@ The screenshot below shows the steps that gets executed during the release
   #deploy the app
   gcloud run deploy sa-taxi-stacc --image gcr.io/sa-taxi-edw/carto-react-docker:latest --region=europe-west1 --quiet --port=80 --allow-unauthenticated
  ```
-
- # Opportunities
-
->The token based auth can be changed into using rest_framework auth-token
->More better user experience specific styling can be added.
->The change into a more rest_framework token based auth could eliminate the use of Cookies.
