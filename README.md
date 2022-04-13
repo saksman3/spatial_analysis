@@ -14,7 +14,7 @@ This project can run locally i.e. on your machine or deployed via a docker conta
   
 - git installation steps [here](https://git-scm.com/downloads)
 - [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable) or npm package manager
-
+---
 ### project specific prerequisites will be install using npm or yarn depending on your preference
 using a terminal editor of your choice
 clone the repo: `git clone https://SATAXIBI@dev.azure.com/SATAXIBI/STACC%202.0/_git/STACC%202.0` this will clone the app into your machine in file STACC 2.0
@@ -32,7 +32,7 @@ navigate into the cloned repo `cd STACC 2.0` and run:
 more views [here](src/assets/readme_files/)
 # Azure devOps Architecture
 ![architecture](src/assets/readme_files/arch.JPG)
-
+---
  - Azure Pipelines
 
    - As the devloper pushes the code into the repository an automated build pipeline is then triggered based on [pipeline-config](azure-pipelines.yml):
@@ -47,7 +47,8 @@ more views [here](src/assets/readme_files/)
 
  - It then re-deploys the container in google-cloud cloud run
  [frontend](https://sa-taxi-stacc-ffw76btnca-ew.a.run.app/). or [backend](https://carto-sa-taxi-stacc-auth-ffw76btnca-ew.a.run.app) depending on which repo you working on.
- Configuration of the pipeline
+
+ #  Configuration of the pipeline
 
    - the configuration consists of gcloud commands so it is important to ensure your worker machine has google-cloud-sdk installed.(azure DevOps installs this by default on its agents)
    - You will need to create a new service connection in your azure devops project settings. the service connection will consist of the gcp service account keys.
