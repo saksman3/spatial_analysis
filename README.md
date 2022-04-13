@@ -35,23 +35,22 @@ more views [here](src/assets/readme_files/)
 
  - Azure Pipelines
 
-⋅⋅⋅As the devloper pushes the code into the repository an automated build pipeline is then triggered based on [pipeline-config](azure-pipelines.yml):
-⋅⋅⋅it then builds the docker image based on the specifications inside the [Dockerfile](Dockerfile)
-⋅⋅⋅when the build succeeeds a release pipeline is triggered  
+   - As the devloper pushes the code into the repository an automated build pipeline is then triggered based on [pipeline-config](azure-pipelines.yml):
+   - it then builds the docker image based on the specifications inside the [Dockerfile](Dockerfile)
+   - when the build succeeeds a release pipeline is triggered  
 
  - Release Pipelines
+   this pipeline is used to pull the image from [google-container-registry](https://console.cloud.google.com/gcr/images/sa-taxi-edw?project=sa-taxi-edw)
 
-  ⋅⋅⋅this pipeline is used to pull the image from [google-container-registry](https://console.cloud.google.com/gcr/images/sa-taxi-edw?project=sa-taxi-edw)
-
-  - ⋅⋅⋅[backend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/auth-api?project=sa-taxi-edw)
-  - ⋅⋅⋅[frontend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/carto-react-docker?project=sa-taxi-edw)
+   - [backend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/auth-api?project=sa-taxi-edw)
+   - [frontend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/carto-react-docker?project=sa-taxi-edw)
 
  - It then re-deploys the container in google-cloud cloud run
  [frontend](https://sa-taxi-stacc-ffw76btnca-ew.a.run.app/). or [backend](https://carto-sa-taxi-stacc-auth-ffw76btnca-ew.a.run.app) depending on which repo you working on.
  Configuration of the pipeline
 
- -- the configuration consists of gcloud commands so it is important to ensure your worker machine has google-cloud-sdk installed.(azure DevOps installs this by default on its agents)
--- You will need to create a new service connection in your azure devops project settings. the service connection will consist of the gcp service account keys.
+   - the configuration consists of gcloud commands so it is important to ensure your worker machine has google-cloud-sdk installed.(azure DevOps installs this by default on its agents)
+   - You will need to create a new service connection in your azure devops project settings. the service connection will consist of the gcp service account keys.
    you can see how to do this [here](https://medium.com/@truble/connect-azure-pipelines-to-gcp-921d31b6303c)
 The screenshot below shows the steps that gets executed during the release
  ![release_pipeline](src/assets/readme_files/frontend_release_pipeline.JPG)
