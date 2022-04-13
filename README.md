@@ -29,7 +29,11 @@ navigate into the cloned repo `cd STACC 2.0` and run:
 ![login](src/assets/readme_files/login_screen.JPG)
 ## Current Location
 ![currentLocation](src/assets/readme_files/current_location.JPG)
+
 more views [here](src/assets/readme_files/)
+
+---
+
 # Azure devOps Architecture
 ![architecture](src/assets/readme_files/arch.JPG)
 
@@ -54,7 +58,7 @@ more views [here](src/assets/readme_files/)
    - the configuration consists of gcloud commands so it is important to ensure your worker machine has google-cloud-sdk installed.(azure DevOps installs this by default on its agents)
    - You will need to create a new service connection in your azure devops project settings. the service connection will consist of the gcp service account keys.
    you can see how to do this [here](https://medium.com/@truble/connect-azure-pipelines-to-gcp-921d31b6303c)
-The screenshot below shows the steps that gets executed during the release
+## The screenshot below shows the steps that gets executed during the release
  ![release_pipeline](src/assets/readme_files/frontend_release_pipeline.JPG)
  ##
  ## steps and commands executed
