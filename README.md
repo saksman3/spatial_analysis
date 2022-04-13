@@ -70,8 +70,8 @@ The screenshot below shows the steps that gets executed during the release
   gcloud run deploy sa-taxi-stacc --image gcr.io/sa-taxi-edw/carto-react-docker:latest --region=europe-west1 --quiet --port=80 --allow-unauthenticated
  ```
 
- > # Opportunities
+ # Opportunities
 
- [^1]: The token based auth can be changed into using rest_framework auth-token
- [^2]: More better user experience specific styling can be added.
- [^3]: The change into a more rest_framework token based auth could eliminate the use of Cookies.
+>The token based auth can be changed into using rest_framework auth-token
+>More better user experience specific styling can be added.
+>The change into a more rest_framework token based auth could eliminate the use of Cookies.
