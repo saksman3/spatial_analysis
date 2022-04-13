@@ -6,7 +6,7 @@ Welcome to CARTO for React! The best way to develop Location Intelligence Apps u
 
 
 # Getting Started.
-This project can run locally i.e. on your machine or deployed via a docker container. the steps below are meant to help you get the app running on your local machine and also deploying it using Azure DevOps.
+This project can run locally i.e. on your machine or deployed via a docker container. the steps below are meant to help you get the app running on your local machine.
 #  Running the project
 ## Local Machine.
 ### System Prerequisites
@@ -55,7 +55,36 @@ navigate into the cloned repo `cd STACC 2.0` and run:
 ![architecture](src/assets/readme_files/arch.JPG)
 
  - Azure Pipelines
+As the devloper pushes the code into the repository an automated build pipeline is then triggered based on [pipeline-config](azure-pipelines.yml):
+-- it then builds the docker image based on the specifications inside the [Dockerfile](Dockerfile)
+-- when the build succeeeds a release pipeline is triggered  
+
  - Release Pipelines
+ this pipeline is used to pull the image from [google-container-registry](https://console.cloud.google.com/gcr/images/sa-taxi-edw?project=sa-taxi-edw)
+  -- [backend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/auth-api?project=sa-taxi-edw)
+  -- [frontend](https://console.cloud.google.com/gcr/images/sa-taxi-edw/global/carto-react-docker?project=sa-taxi-edw)
+ - It then re-deploys the container in google-cloud cloud run
+ [frontend](https://sa-taxi-stacc-ffw76btnca-ew.a.run.app/). or [backend](https://carto-sa-taxi-stacc-auth-ffw76btnca-ew.a.run.app) depending on which repo you working on.
+ Configuration of the pipeline
+
+ -- the configuration consists of gcloud commands so it is important to ensure your worker machine has google-cloud-sdk installed.(azure DevOps installs this by default on its agents)
+-- You will need to create a new service connection in your azure devops project settings. the service connection will consist of the gcp service account keys.
+   you can see how to do this [here](https://medium.com/@truble/connect-azure-pipelines-to-gcp-921d31b6303c)
+The screenshot below shows the steps that gets executed during the release
+ ![release_pipeline](src/assets/readme_files/frontend_release_pipeline.JPG)
+ ##
+ ## steps and commands executed
+ ```
+  #first task downloads the secure file 
+  #copy the secure file into your workdir
+  cp $(sakey.secureFilePath) $(System.DefaultWorkingDirectory)/_STACC\ 2.0/sa-key.json
+  #Set Gcloud Project
+  gcloud config set project sa-taxi-edw
+  #Authenticate into GCP
+  gcloud auth activate-service-account --key-file $(sakey.secureFilePath)
+  #deploy the app
+  gcloud run deploy sa-taxi-stacc --image gcr.io/sa-taxi-edw/carto-react-docker:latest --region=europe-west1 --quiet --port=80 --allow-unauthenticated
+ ```
 
 
 
