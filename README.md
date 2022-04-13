@@ -29,28 +29,7 @@ navigate into the cloned repo `cd STACC 2.0` and run:
 ![login](src/assets/readme_files/login_screen.JPG)
 ## Current Location
 ![currentLocation](src/assets/readme_files/current_location.JPG)
-## Current Location filter vehicle
-![currentLocationFilterVehicles](src/assets/readme_files/current_location_vehicle_filters.JPG)
-## Current Location ToolTip
-![Current View ToolTip](src/assets/readme_files/current_view_tooltip.png)
-## Mercedes filter
-![merc_filter](src/assets/readme_files/mercedes_filter.JPG)
-## Iveco Filter
-![IvecoFilter](src/assets/readme_files/iveco.JPG)
-## Nissan Filter
-![NissanFilter](src/assets/readme_files/nissan_filter.JPG)
-## Open Market Toyota
-![OpenMarketToyota](src/assets/readme_files/open%20market%20toyota%20filter.JPG)
-## Route View
-![RouteView](src/assets/readme_files/routeview.JPG)
-## Search Bar
-![SearchBar](src/assets/readme_files/search_bar.JPG)
-## Date filter
-![DateFilter](src/assets/readme_files/date_filter.JPG)
-## Route Aggregates
-![RouteAggregate](src/assets/readme_files/route_aggregates.JPG)
-## RouteToolTip
-![RouteToolTip](src/assets/readme_files/route_tooltip.JPG)
+more views [here](src/assets/readme_files/)
 # Azure devOps Architecture
 ![architecture](src/assets/readme_files/arch.JPG)
 
