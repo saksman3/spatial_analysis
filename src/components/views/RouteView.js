@@ -67,7 +67,7 @@ export default function RouteView() {
         setAccounts(data.rows)
       })
     }
-    /* getData(); */
+    getData();
   }, [])
 
   const RetrieveData = (account) => {
