@@ -67,8 +67,8 @@ export default function RouteView() {
         setAccounts(data.rows)
       })
     }
-    getData();
-  }, [dispatch])
+    /* getData(); */
+  }, [])
 
   const RetrieveData = (account) => {
     const token = Cookies.get('access_token');
