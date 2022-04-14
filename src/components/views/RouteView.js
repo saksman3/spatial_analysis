@@ -49,21 +49,26 @@ export default function RouteView() {
     "key": "selection",
   }]);
   useEffect(() => {
-    // get account data on page load
-    const token = Cookies.get('access_token');
-    fetch('https://gcp-europe-west1.api.carto.com/v3/sql/sa_taxi_default/query', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        "q": "select AccountNumber from sa-taxi-edw.analytics.account_summary"
+    const getData = async () => {
+      // get account data on page load
+      console.log("getting accounts")
+      const token = Cookies.get('access_token');
+      console.log(token)
+      await fetch('https://gcp-europe-west1.api.carto.com/v3/sql/sa_taxi_default/query', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          "q": "select AccountNumber from sa-taxi-edw.analytics.account_summary"
+        })
+      }).then(response => response.json()).then(data => {
+        setAccounts(data.rows)
       })
-    }).then(response => response.json()).then(data => {
-      setAccounts(data.rows)
-    })
-  })
+    }
+    getData();
+  }, [dispatch])
 
   const RetrieveData = (account) => {
     const token = Cookies.get('access_token');
@@ -230,8 +235,8 @@ export default function RouteView() {
           return acc + currVal.LPPointPercentage
         }
         setLP((data.reduce(LPreducer, 0) / num_of_days).toFixed(2))
-         // get NW average
-        
+        // get NW average
+
         let NWreducer = (acc, currVal) => {
 
           return acc + currVal.NWPointPercentage
@@ -271,7 +276,7 @@ export default function RouteView() {
 
         //get actual distance sum
         let actual_distance_reducer = (accumulator, currentValue) => accumulator + currentValue.ActualDistance_km
-        setActualRouteDistanceKM((data.reduce(actual_distance_reducer,0).toFixed(2)));
+        setActualRouteDistanceKM((data.reduce(actual_distance_reducer, 0).toFixed(2)));
         // get off route total
         let off_route_distance_reducer = (accumulator, currentValue) => accumulator + currentValue.OffRouteDistance_km
         setOffRouteDistanceKM((data.reduce(off_route_distance_reducer, 0).toFixed(2)))
@@ -293,21 +298,21 @@ export default function RouteView() {
   const handleDateSelect = (ranges) => {
     setDateRange([ranges.selection])
   }
-  useEffect(() => {
-    dispatch(addSource(routeViewSource));
-    console.log(routeViewSource.data);
-    dispatch(
-      addLayer({
-        id: ROUTE_VIEW_LAYER_ID,
-        source: routeViewSource.id,
-      }),
-    );
-
-    return () => {
-      dispatch(removeLayer(ROUTE_VIEW_LAYER_ID));
-      dispatch(removeSource(routeViewSource.id));
-    };
-  }, [dispatch]);
+  /*   useEffect(() => {
+      dispatch(addSource(routeViewSource));
+      console.log(routeViewSource.data);
+      dispatch(
+        addLayer({
+          id: ROUTE_VIEW_LAYER_ID,
+          source: routeViewSource.id,
+        }),
+      );
+  
+      return () => {
+        dispatch(removeLayer(ROUTE_VIEW_LAYER_ID));
+        dispatch(removeSource(routeViewSource.id));
+      };
+    }, [dispatch]); */
 
   // [hygen] Add useEffect
 
@@ -315,7 +320,7 @@ export default function RouteView() {
     <Grid container direction='column' className={classes.routeView}>
       { /* include the search bar component, 
       it expects data which is the list of objects, Retrieve data which is the function that fetches data from source when you click on search */}
-      
+
       <SearchBar
         placeholder="Search Account"
         data={accounts}
@@ -331,11 +336,11 @@ export default function RouteView() {
         monthDisplayFormat="MM"
       />
 
-      <Divider/>
+      <Divider />
 
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Approved Route</h6>
-        <br />
+      <br />
       <div className="approvedroute MuiBox-root MuiBox-root-47 makeStyles-root-44">
         {ApprovedRoute}
         <br />
@@ -343,41 +348,41 @@ export default function RouteView() {
 
       <Divider />
 
-        <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
-          <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actual Route Distance KM</h6>
+      <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
+        <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actual Route Distance KM</h6>
       <div className="approvedroute">
-          <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{ActualRouteDistanceKM}</span>
+        <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{ActualRouteDistanceKM}</span>
       </div>
-        <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Off Route Distance KM</h6>
+      <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Off Route Distance KM</h6>
       <div className="approvedroute">
-          <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{OffRouteDistanceKM}</span>
+        <span className="MuiBox-root MuiBox-root-47 makeStyles-root-44">{OffRouteDistanceKM}</span>
       </div>
 
       <Divider />
 
       <h6 className="MuiTypography-root MuiTypography-subtitle1 MuiTypography-colorTextPrimary">
         <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;% Per Province</h6>
-        <br />
+      <br />
       <div className="provincecontainer MuiBox-root MuiBox-root-47 makeStyles-root-44">
         <div classname="provinceitem"><b>Gauteng</b></div>
-          <div classname="provinceitem">{GautengPointCount}</div>
+        <div classname="provinceitem">{GautengPointCount}</div>
         <div classname="provinceitem"><b>Mpumalanga</b></div>
-          <div classname="provinceitem">{MPPointCount}</div>
+        <div classname="provinceitem">{MPPointCount}</div>
         <div classname="provinceitem"><b>Limpopo</b></div>
-          <div classname="provinceitem">{LPPointCount}</div>
+        <div classname="provinceitem">{LPPointCount}</div>
         <div classname="provinceitem"><b>North West</b></div>
-          <div classname="provinceitem">{NWPointCount}</div>
+        <div classname="provinceitem">{NWPointCount}</div>
         <div classname="provinceitem"><b>Eastern Cape</b></div>
-          <div classname="provinceitem">{ECPointCount}</div>
+        <div classname="provinceitem">{ECPointCount}</div>
         <div classname="provinceitem"><b>Kwazulu Natal</b></div>
-          <div classname="provinceitem">{KZNPointCount}</div>
+        <div classname="provinceitem">{KZNPointCount}</div>
         <div classname="provinceitem"><b>Western Cape</b></div>
-          <div classname="provinceitem">{WCPointCount}</div>
+        <div classname="provinceitem">{WCPointCount}</div>
         <div classname="provinceitem"><b>Northern Cape</b></div>
-          <div classname="provinceitem">{NCPointCount}</div>
+        <div classname="provinceitem">{NCPointCount}</div>
         <div classname="provinceitem"><b>Free State</b></div>
-          <div classname="provinceitem">{FSPointCount}</div>
+        <div classname="provinceitem">{FSPointCount}</div>
       </div>
     </Grid>
   );
